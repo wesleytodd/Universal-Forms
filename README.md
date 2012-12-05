@@ -80,3 +80,22 @@ I am going to start with JavaScript, PHP and Go.  But hopefully in the future I 
 			}
 		]
 	}
+
+## Templates
+
+Each implementation will be accompanied by a set of templates following this structure:
+
+- wrap
+- input
+- radio
+- checkbox
+- select
+- textarea
+- button
+
+
+
+
+
+
+
