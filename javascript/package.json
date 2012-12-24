@@ -15,5 +15,9 @@
     "url": "https://github.com/wesleytodd/Universal-Forms"
   },
   "author": "Wes Todd",
-  "license": "BSD"
+  "license": "BSD",
+  "devDependencies": {
+    "grunt": "~0.3.17",
+    "node-static": "~0.6.6"
+  }
 }
