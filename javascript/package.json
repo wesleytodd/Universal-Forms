@@ -1,0 +1,19 @@
+{
+  "name": "Universal-Forms",
+  "version": "0.0.0",
+  "description": "A javascript inplementation of the Universal Forms pattern",
+  "main": "lib/index.js",
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wesleytodd/Universal-Forms"
+  },
+  "author": "Wes Todd",
+  "license": "BSD"
+}
