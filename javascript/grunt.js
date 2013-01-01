@@ -6,9 +6,18 @@ module.exports = function(grunt){
 		exServer : {
 			port : 8000,
 			root : './examples'
+		},
+		mocha : {
+			all : {
+				src : ['test/index.html'],
+				options : {
+					run : true
+				}
+			}
 		}
 	});
 
+	grunt.loadNpmTasks('grunt-mocha');
 
 	grunt.registerTask('example-server', 'Start an server for the examples.', function(){
 

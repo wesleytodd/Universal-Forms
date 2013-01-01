@@ -7,13 +7,13 @@
  * Basic Usage:
  *
  */
-(function(globalScope, Renderer) {
+(function() {
 
 	/**
 	 * Extend helper, based of underscore.js
 	 */
 	var extend = function(obj) {
-		var others = Array.prototype.slice.call(arguments, 1);
+		var others = Array.prototype.slice.call(arguments, 1),
 			l = others.length;
 		for (var i = 0; i < l; i++) {
 			if (typeof others[i] !== 'undefined') {
@@ -23,7 +23,7 @@
 			}
 		}
 		return obj;
-	}
+	};
 
 	/**
 	 * Form Object Constructor
@@ -39,7 +39,7 @@
 		if (!(this instanceof Form)) return new Form(options);
 
 		// setup options
-		if (options === 'undefined') options = {};
+		if (typeof options === 'undefined') options = {};
 
 		// set common top level attributes
 		options.attributes = extend(options.attributes || {}, {
@@ -51,11 +51,8 @@
 		extend(this, {
 			attributes : options.attributes,
 			fields     : {},
-			extra      : options.extra
+			options    : options
 		});
-
-		// setup template
-		this.template = options.template || this.getTemplate();
 
 		// setup and process fields
 		if (typeof options.fields === 'undefined') options.fields = [];
@@ -82,7 +79,7 @@
 	 * Remove a field by name
 	 */
 	Form.prototype.removeField = function(name) {
-		if (typeof this._fields[name] !== 'undefined') delete this._fields[name];
+		if (typeof this.fields[name] !== 'undefined') delete this.fields[name];
 	};
 
 	/**
@@ -92,14 +89,14 @@
 	 */
 	var Field = function(name, type, options) {
 		// setup a field here
-		if (!(this instanceof Field)) return new Field(options);
+		if (!(this instanceof Field)) return new Field(name, type, options);
 
 		// require name & type
-		if (typeof name === 'undefined') throw new TypeError('A name is required for all fields');
-		if (typeof type === 'undefined') throw new TypeError('A type is required for all fields');
+		if (typeof name !== 'string') throw new TypeError('A name is required for all fields');
+		if (typeof type !== 'string') throw new TypeError('A type is required for all fields');
 
 		// Setup options
-		if (typeof options === 'undefined') options = {};
+		if (typeof options !== 'object') options = {};
 
 		// set rules array
 		if (typeof options.rules === 'undefined') options.rules = [];
@@ -114,54 +111,44 @@
 		});
 
 		extend(this, {
-			name       : options.name,
-			type       : options.type,
+			name       : name,
+			type       : type,
 			label      : options.label,
 			attributes : options.attributes,
 			rules      : options.rules,
-			extra      : options.extra,
+			options    : options,
 			errors     : {}
 		});
 
-		// setup template
-		this.template = options.template || this.getTemplate();
 	};
 
 	/**
 	 * Set error on field
 	 */
-	Field.prototype.setError = function(message) {
-
+	Field.prototype.setError = function(type, message) {
+		this.errors[type] = message;
 	};
 
 	/**
 	 * Clear error
 	 */
 	Field.prototype.clearError = function(type) {
-
-	}
-
-	/**
-	 * Run the validation rules on the field
-	 */
-	Field.prototype.validate = function() {
-
+		if (typeof this.errors[type] !== 'undefined') return delete this.errors[type];
+		if (typeof type === 'undefined') this.errors = {};
 	};
 
 	/**
-	 * Decorate Form and Field with Renderer
+	 * Export
 	 */
-	for (var prop in Renderer) {
-		Form.prototype[prop] = Renderer[prop];
-		Field.prototype[prop] = Renderer[prop];
-	}
-
-	/**
-	 * Return modules
-	 */
-	return {
-		Form  : Form,
+	var expose = {
+		Form : Form,
 		Field : Field
 	};
 
-})(this, UniversalFormRenderer);
+	if (typeof exports !== 'undefined') {
+		exports = expose;
+	} else {
+		window.UniversalForms = expose;
+	}
+
+})();
