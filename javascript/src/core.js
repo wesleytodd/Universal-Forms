@@ -2,39 +2,28 @@
  * Universal Forms
  * http://wesleytodd.com/
  *
- * Version 0.1
+ * Version 0.0.1
  *
  * Basic Usage:
  *
  */
-var UniversalForm = (function(_, Renderer) {
+(function(globalScope, Renderer) {
 
 	/**
-	 * Helper methods
+	 * Extend helper, based of underscore.js
 	 */
-	_.mixin({
-		/**
-		 * Helper: typeof
-		 */
-		t : function(v, t) {
-			if(typeof t == 'undefined') t = 'undefined';
-			return typeof v == t;
-		},
-
-		/**
-		 * Helper: instanceof
-		 */
-		i : function(v, i) {
-			return v instanceof i;
-		},
-
-		/**
-		 * Helper: slice
-		 */
-		slice : function(arr, begin, end) {
-			return Array.prototype.slice.call(arr, begin, end);
+	var extend = function(obj) {
+		var others = Array.prototype.slice.call(arguments, 1);
+			l = others.length;
+		for (var i = 0; i < l; i++) {
+			if (typeof others[i] !== 'undefined') {
+				for (var prop in others[i]) {
+					obj[prop] = others[i][prop];
+				}
+			}
 		}
-	});
+		return obj;
+	}
 
 	/**
 	 * Form Object Constructor
@@ -47,19 +36,19 @@ var UniversalForm = (function(_, Renderer) {
 	var Form = function(options) {
 
 		// force instantiation of new object
-		if (!_.i(this, Form)) return new Form(options);
+		if (!(this instanceof Form)) return new Form(options);
 
 		// setup options
-		if (_.t(options)) options = {};
+		if (options === 'undefined') options = {};
 
 		// set common top level attributes
-		options.attributes = _.extend(options.attributes || {}, {
+		options.attributes = extend(options.attributes || {}, {
 			id     : options.id,
 			method : options.method,
 			action : options.action
 		});
 
-		_.extend(this, {
+		extend(this, {
 			attributes : options.attributes,
 			fields     : {},
 			extra      : options.extra
@@ -69,34 +58,31 @@ var UniversalForm = (function(_, Renderer) {
 		this.template = options.template || this.getTemplate();
 
 		// setup and process fields
-		if (_.t(options.fields)) options.fields = [];
-		else if (_.t(options.fields, Array)) throw new TypeError('the fields must be defined as an array');
+		if (typeof options.fields === 'undefined') options.fields = [];
+		else if (!(options.fields instanceof Array)) throw new TypeError('the fields must be defined as an array');
 
 		var len = options.fields.length;
 		for (var i = 0; i < len; i++) {
-			this.addField(options.fields[i].name, options.fields[i]);
+			this.addField(options.fields[i].name, options.fields[i].type, options.fields[i]);
 		};
 	};
 
 	/**
 	 * Add a new field to the form
 	 */
-	Form.prototype.addField = function(name, options) {
+	Form.prototype.addField = function(name, type, options) {
 		// If just a Field object was passed in, add it
-		if (_.i(name, Field)) return this.fields[name.name] = name;
+		if (name instanceof Field) return this.fields[name.name] = name;
 
 		// Otherwise, create a new field object and add it
-		options = _.extend(options, {
-			name : name
-		})
-		return this.fields[options.name] = Field(options);
+		return this.fields[name] = new Field(name, type, options);
 	};
 
 	/**
 	 * Remove a field by name
 	 */
 	Form.prototype.removeField = function(name) {
-		if (!_.t(this._fields[name])) this._fields[name] = null;
+		if (typeof this._fields[name] !== 'undefined') delete this._fields[name];
 	};
 
 	/**
@@ -104,28 +90,30 @@ var UniversalForm = (function(_, Renderer) {
 	 *
 	 * The field object maintains the state of each individual field.
 	 */
-	var Field = function(options) {
+	var Field = function(name, type, options) {
 		// setup a field here
-		if (!_.i(this, Field)) return new Field(options);
+		if (!(this instanceof Field)) return new Field(options);
 
 		// require name & type
-		if (_.t(options)) throw new TypeError('Field options must be supplied');
-		if (_.t(options.name)) throw new TypeError('A name is required for all fields');
-		if (_.t(options.type)) throw new TypeError('A type is required for all fields');
+		if (typeof name === 'undefined') throw new TypeError('A name is required for all fields');
+		if (typeof type === 'undefined') throw new TypeError('A type is required for all fields');
+
+		// Setup options
+		if (typeof options === 'undefined') options = {};
 
 		// set rules array
-		if (_.t(options.rules)) options.rules = [];
-		else if (_.t(options.rules, Array)) throw new TypeError('the rules must be defined as an array');
+		if (typeof options.rules === 'undefined') options.rules = [];
+		else if (!(options.rules instanceof Array)) throw new TypeError('the rules must be defined as an array');
 
 		// set common top level attributes
-		options.attributes = _.extend(options.attributes || {}, {
-			name  : options.name,
-			id    : options.id,
-			type  : options.type,
+		options.attributes = extend(options.attributes || {}, {
+			name  : name,
+			id    : options.id || name,
+			type  : type,
 			value : options.value
 		});
 
-		_.extend(this, {
+		extend(this, {
 			name       : options.name,
 			type       : options.type,
 			label      : options.label,
@@ -176,4 +164,4 @@ var UniversalForm = (function(_, Renderer) {
 		Field : Field
 	};
 
-})(window._, UniversalFormRenderer);
+})(this, UniversalFormRenderer);
