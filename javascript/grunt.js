@@ -9,15 +9,27 @@ module.exports = function(grunt){
 		},
 		mocha : {
 			all : {
-				src : ['test/index.html'],
+				src : ['test/browser/index.html'],
 				options : {
 					run : true
 				}
 			}
+		},
+		simplemocha : {
+			all : { 
+				src : ['test/node/node-renderer.js'],
+				options : {
+					globals : ['should'],
+					timeout : 3000,
+					ui : 'bdd',
+					reporter : 'list'
+				}
+			},
 		}
 	});
 
 	grunt.loadNpmTasks('grunt-mocha');
+	grunt.loadNpmTasks('grunt-simple-mocha');
 
 	grunt.registerTask('example-server', 'Start an server for the examples.', function(){
 

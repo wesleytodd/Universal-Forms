@@ -22,6 +22,11 @@
     "grunt-mocha": "~0.1.7",
     "mocha": "~1.7.4",
     "expect": "0.0.2",
-    "expect.js": "~0.2.0"
+    "expect.js": "~0.2.0",
+    "grunt-simple-mocha": "~0.3.1",
+    "should": "~1.2.1"
+  },
+  "dependencies": {
+    "underscore": "~1.4.3"
   }
 }

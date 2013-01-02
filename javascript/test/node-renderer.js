@@ -1,3 +1,0 @@
-describe('Node Renderer', function() {
-	
-});

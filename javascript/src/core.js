@@ -26,6 +26,11 @@
 	};
 
 	/**
+	 * Default form renderer variable
+	 */
+	var formRenderer;
+
+	/**
 	 * Form Object Constructor
 	 *
 	 * @param options object A hash of form options, fields and validations rules
@@ -62,6 +67,11 @@
 		for (var i = 0; i < len; i++) {
 			this.addField(options.fields[i].name, options.fields[i].type, options.fields[i]);
 		};
+
+		if (typeof formRenderer === 'function') {
+			this.renderer = formRenderer;
+		}
+
 	};
 
 	/**
@@ -81,6 +91,30 @@
 	Form.prototype.removeField = function(name) {
 		if (typeof this.fields[name] !== 'undefined') delete this.fields[name];
 	};
+
+	/**
+	 * Render form
+	 */
+	Form.prototype.render = function(renderer) {
+		if (typeof renderer !== 'undefined') {
+			return renderer(this);
+		} else if (typeof this.renderer !== 'undefined') {
+			return this.renderer(this);
+		}
+		throw new Error('A renderer function must be provided');
+	}
+
+	/**
+	 * Set the default form renderer
+	 */
+	Form.setRenderer = function(Renderer, options) {
+		formRenderer = Renderer(options);
+	}
+
+	/**
+	 * Default form renderer variable
+	 */
+	var fieldRenderer;
 
 	/**
 	 * Field Object Constructor
@@ -107,7 +141,7 @@
 			name  : name,
 			id    : options.id || name,
 			type  : type,
-			value : options.value
+			value : options.value || ''
 		});
 
 		extend(this, {
@@ -119,6 +153,10 @@
 			options    : options,
 			errors     : {}
 		});
+
+		if (typeof fieldRenderer === 'function') {
+			this.renderer = fieldRenderer;
+		}
 
 	};
 
@@ -138,17 +176,35 @@
 	};
 
 	/**
+	 * Render field
+	 */
+	Field.prototype.render = function(renderer) {
+		if (typeof renderer !== 'undefined') {
+			return renderer(this);
+		} else if (typeof this.renderer !== 'undefined') {
+			return this.renderer(this);
+		}
+		throw new Error('A renderer function must be provided');
+	}
+
+	/**
+	 * Set the default field renderer
+	 */
+	Field.setRenderer = function(Renderer, options) {
+		fieldRenderer = Renderer(options);
+	}
+
+	/**
 	 * Export
 	 */
-	var expose = {
-		Form : Form,
-		Field : Field
-	};
-
 	if (typeof exports !== 'undefined') {
-		exports = expose;
+		exports.Form = Form;
+		exports.Field = Field;
 	} else {
-		window.UniversalForms = expose;
+		window.UniversalForms = {
+			Form : Form,
+			Field : Field
+		};
 	}
 
 })();
