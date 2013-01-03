@@ -68,7 +68,7 @@
 			this.addField(options.fields[i].name, options.fields[i].type, options.fields[i]);
 		};
 
-		if (typeof formRenderer === 'function') {
+		if (typeof formRenderer !== 'undefined') {
 			this.renderer = formRenderer;
 		}
 
@@ -97,9 +97,45 @@
 	 */
 	Form.prototype.render = function(renderer) {
 		if (typeof renderer !== 'undefined') {
-			return renderer(this);
+			return renderer.render(this);
 		} else if (typeof this.renderer !== 'undefined') {
-			return this.renderer(this);
+			return this.renderer.render(this);
+		}
+		throw new Error('A renderer function must be provided');
+	}
+
+	/**
+	 * Open form
+	 */
+	Form.prototype.open = function(renderer) {
+		if (typeof renderer !== 'undefined') {
+			return renderer.open(this);
+		} else if (typeof this.renderer !== 'undefined') {
+			return this.renderer.open(this);
+		}
+		throw new Error('A renderer function must be provided');
+	}
+
+	/**
+	 * Render field
+	 */
+	Form.prototype.field = function(name, renderer) {
+		if (typeof renderer !== 'undefined') {
+			return renderer.field(this, name);
+		} else if (typeof this.renderer !== 'undefined') {
+			return this.renderer.field(this, name);
+		}
+		throw new Error('A renderer function must be provided');
+	}
+
+	/**
+	 * Close form
+	 */
+	Form.prototype.close = function(renderer) {
+		if (typeof renderer !== 'undefined') {
+			return renderer.close(this);
+		} else if (typeof this.renderer !== 'undefined') {
+			return this.renderer.close(this);
 		}
 		throw new Error('A renderer function must be provided');
 	}

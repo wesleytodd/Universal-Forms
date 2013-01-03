@@ -35,9 +35,23 @@ describe('Node Renderer', function() {
 
 	describe('FormRenderer', function() {
 		it('Should render a form', function() {
-			var form = Form();
-			var out = form.render();
-			console.log(out);
+			var form = Form({
+				fields : [
+					{
+						'name' : 'test',
+						'type' : 'text',
+						'label' : 'Test'
+					}
+				]
+			});
+			var out = form.render().should.eql([
+				'<form>\n',
+					'<div class="field-wrap " id="wrapper-test">\n\t\n\t',
+						'<label for="field-test">Test</label>\n\t\n\t',
+						'<input name="test" id="test" type="text" value="" />\n\n',
+					'</div>\n',
+				'</form>\n'
+			].join(''));
 		});
 	});
 });

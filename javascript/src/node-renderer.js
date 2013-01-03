@@ -41,7 +41,7 @@ exports.Field = function(options) {
 
 	var l = options.preload.length;
 	for (var i = 0; i < l; i++) {
-		console.log(options.preload[i]);
+		//console.log(options.preload[i]);
 	}
 
 	return function(field) {
@@ -70,9 +70,29 @@ exports.Field = function(options) {
  * Form Renderer
  */
 exports.Form = function(options) {
+	options = options || {};
 
-	return function(form) {
 
-		return '';
-	}
+
+
+	return {
+		open : function(form) {
+			return '<form>\n';
+		},
+		close : function(form) {
+			return '</form>\n';
+		},
+		field : function(form, name) {
+			return form.fields[name].render();
+		},
+		render : function(form) {
+			var out = form.open();
+			for (var name in form.fields) {
+				out += form.field(name);
+			}
+			out += form.close();
+			return out;
+		}
+	};
+	
 };
