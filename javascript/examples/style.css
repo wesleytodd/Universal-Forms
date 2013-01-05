@@ -111,14 +111,6 @@ html {
 	font-size: 100%;
 	-webkit-text-size-adjust: 100%;
 	-ms-text-size-adjust: 100%;
-
-	background-color: #E5F1E9;
-	background-image: -webkit-linear-gradient(45deg, #ddd 25%, transparent 25%, transparent 75%, #ddd 75%, #ddd),
-						-webkit-linear-gradient(45deg, #ddd 25%, transparent 25%, transparent 75%, #ddd 75%, #ddd);
-	background-image: linear-gradient(45deg, #ddd 25%, transparent 25%, transparent 75%, #ddd 75%, #ddd),
-						linear-gradient(45deg, #ddd 25%, transparent 25%, transparent 75%, #ddd 75%, #ddd);
-	background-size: 1em 1em;
-	background-position: 0 0, .5em .5em;
 }
 html,
 button,
@@ -130,8 +122,8 @@ textarea {
 }
 body {
 	height: 100%;
-	width: 90%;
-	margin: 1em auto;
+	width: 100%;
+	margin: 0;
 	padding: 1em;
 	font-size: 1em;
 	line-height: 1.4;
@@ -256,7 +248,9 @@ input.button:active {
 /* ========================================================================== */
 
 /* Less than 320px but will apply at all sizes */
+#page-header {
 
+}
 
 /* 320px to 479px */
 @media only screen and (min-width: 320px) {
