@@ -49,7 +49,7 @@
 		// set common top level attributes
 		options.attributes = extend(options.attributes || {}, {
 			id     : options.id,
-			method : options.method,
+			method : options.method || 'POST',
 			action : options.action
 		});
 

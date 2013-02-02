@@ -5,7 +5,7 @@ module.exports = function(grunt){
 		},
 		exServer : {
 			port : 8000,
-			root : './examples'
+			root : '.'
 		},
 		mocha : {
 			all : {
