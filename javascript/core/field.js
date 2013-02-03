@@ -29,21 +29,15 @@
 		// set common top level attributes
 		options.attributes        = options.attributes || {};
 		options.attributes.name   = name;
-		options.attributes.id     = options.id || name;
-        options.attributes.type   = type;
-        options.attributes.value  = options.value || '';
 
         this.name       = name;
         this.type       = type;
+		this.value      = options.value || '';
         this.label      = options.label;
         this.attributes = options.attributes;
         this.rules      = options.rules;
         this.options    = options;
         this.errors     = {};
-
-		if (typeof fieldRenderer === 'function') {
-			this.renderer = fieldRenderer;
-		}
 
 	};
 
@@ -63,28 +57,9 @@
 	};
 
 	/**
-	 * Render field
+	 * Render field placeholder method
 	 */
-	Field.prototype.render = function(renderer) {
-		if (typeof renderer !== 'undefined') {
-			return renderer(this);
-		} else if (typeof this.renderer !== 'undefined') {
-			return this.renderer(this);
-		}
-		throw new Error('A renderer function must be provided');
-	}
-
-	/**
-	 * Default form renderer variable
-	 */
-	var fieldRenderer;
-
-	/**
-	 * Set the default field renderer
-	 */
-	Field.setRenderer = function(Renderer, options) {
-		fieldRenderer = Renderer(options);
-	}
+	Field.prototype.render = function() {}
 
 	/**
 	 * Export

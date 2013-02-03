@@ -6,6 +6,7 @@
  *
  */
 (function() {
+
 	/**
 	 * Form Object Constructor
 	 *
@@ -41,15 +42,6 @@
 			this.addField(options.fields[i].name, options.fields[i].type, options.fields[i]);
 		};
 
-		if (typeof options.renderer !== 'undefined') {
-			if (typeof options.renderer === 'function') {
-				options.renderer = options.renderer(options.rendererOptions);
-			}
-			this.renderer = options.renderer;
-		} else if (typeof formRenderer !== 'undefined') {
-			this.renderer = formRenderer;
-		}
-
 	};
 
 	/**
@@ -57,10 +49,10 @@
 	 */
 	Form.prototype.addField = function(name, type, options) {
 		// If just a Field object was passed in, add it
-		if (name instanceof Field) return this.fields[name.name] = name;
+		if (name instanceof UniversalForms.Field) return this.fields[name.name] = name;
 
 		// Otherwise, create a new field object and add it
-		return this.fields[name] = new Field(name, type, options);
+		return this.fields[name] = new UniversalForms.Field(name, type, options);
 	};
 
 	/**
@@ -71,64 +63,22 @@
 	};
 
 	/**
-	 * Render form
+	 * Loop through fields
 	 */
-	Form.prototype.render = function(renderer) {
-		if (typeof renderer !== 'undefined') {
-			return renderer.render(this);
-		} else if (typeof this.renderer !== 'undefined') {
-			return this.renderer.render(this);
-		}
-		throw new Error('A renderer function must be provided');
-	}
+	Form.prototype.eachField = function(fnc, ctx) {
+		ctx = ctx || this;
+		for (var name in this.fields) {
+			if (fnc.call(ctx, this.fields[name], name, this.fields) === false) break;
+		};
+	};
 
 	/**
-	 * Open form
+	 * Render methods placeholders
 	 */
-	Form.prototype.open = function(renderer) {
-		if (typeof renderer !== 'undefined') {
-			return renderer.open(this);
-		} else if (typeof this.renderer !== 'undefined') {
-			return this.renderer.open(this);
-		}
-		throw new Error('A renderer function must be provided');
-	}
-
-	/**
-	 * Render field
-	 */
-	Form.prototype.field = function(name, renderer) {
-		if (typeof renderer !== 'undefined') {
-			return renderer.field(this, name);
-		} else if (typeof this.renderer !== 'undefined') {
-			return this.renderer.field(this, name);
-		}
-		throw new Error('A renderer function must be provided');
-	}
-
-	/**
-	 * Close form
-	 */
-	Form.prototype.close = function(renderer) {
-		if (typeof renderer !== 'undefined') {
-			return renderer.close(this);
-		} else if (typeof this.renderer !== 'undefined') {
-			return this.renderer.close(this);
-		}
-		throw new Error('A renderer function must be provided');
-	}
-
-	/**
-	 * Default form renderer variable
-	 */
-	var formRenderer;
-
-	/**
-	 * Set the default form renderer
-	 */
-	Form.setRenderer = function(Renderer, options) {
-		formRenderer = Renderer(options);
-	}
+	Form.prototype.render = function() {};
+	Form.prototype.open   = function() {};
+	Form.prototype.field  = function() {};
+	Form.prototype.close  = function() {};
 
 	/**
 	 * Export

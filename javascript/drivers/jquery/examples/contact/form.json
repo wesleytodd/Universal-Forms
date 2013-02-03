@@ -10,7 +10,7 @@
 		{
 			"name" : "lname",
 			"type" : "text",
-			"label" : "LastName"
+			"label" : "Last Name"
 		},
 		{
 			"name" : "email",
@@ -20,6 +20,17 @@
 				"required",
 				"email"
 			]
+		},
+		{
+			"name" : "regarding",
+			"type" : "select",
+			"label" : "Regarding",
+			"value" : "What Up?",
+			"options" : {
+				"General" : "General",
+				"What Up?" : "What Up?",
+				"Other" : "Other"
+			}
 		},
 		{
 			"name" : "subject",

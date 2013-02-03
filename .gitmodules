@@ -1,3 +1,3 @@
-[submodule "javascript/src/drivers/jquery/lib/jquery-templates"]
-	path = javascript/src/drivers/jquery/lib/jquery-templates
+[submodule "javascript/drivers/jquery/lib/jquery-templates"]
+	path = javascript/drivers/jquery/lib/jquery-templates
 	url = https://github.com/wesleytodd/jQuery-Templates.git
