@@ -48,6 +48,11 @@
 				"required",
 				"length[25,]"
 			]
+		},
+		{
+			"name" : "send",
+			"type" : "submit",
+			"value" : "Send"
 		}
 	]
 }

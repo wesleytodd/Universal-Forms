@@ -12,11 +12,13 @@
 
 	<div id="contact-form"></div>
 
-	<script src="../lib/jquery.min.js"></script>
+	<script src="../lib/jquery-1.9.0.min.js"></script>
 	<script src="../lib/jquery-templates/src/jquery.templates.js"></script>
+	<script src="../lib/jquery-validation/jquery.validate.js"></script>
 	<script src="../../../../core/field.js"></script>
 	<script src="../../../../core/form.js"></script>
 	<script src="../renderer.js"></script>
+	<script src="../validator.js"></script>
 	<script>
 		jQuery(document).ready(function($){
 			var res = $.ajax({
@@ -25,6 +27,7 @@
 			}).success(function(data) {
 				var form = UniversalForms.Form(data);
 				form.render('#contact-form');
+				form.validate();
 			});
 		});
 	</script>

@@ -30,6 +30,28 @@
 		options.attributes        = options.attributes || {};
 		options.attributes.name   = name;
 
+		switch (type) {
+			case 'text' :
+			case 'password' :
+			case 'hidden' :
+			case 'email' :
+			case 'search' :
+			case 'date' :
+			case 'datetime' :
+			case 'file' :
+			case 'number' :
+			case 'range' :
+			case 'tel' :
+			case 'time' :
+			case 'url' :
+			case 'color' :
+			case 'month' :
+			case 'week' :
+			case 'submit' :
+				options.attributes.type = type;
+				break;
+		};
+
         this.name       = name;
         this.type       = type;
 		this.value      = options.value || '';

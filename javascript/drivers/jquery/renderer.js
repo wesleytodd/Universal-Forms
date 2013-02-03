@@ -23,10 +23,12 @@
 			$out.append(field.render());
 		});
 
+		this.$el = $out;
+
 		if ($selector instanceof $) {
-			return $selector.html($out);
+			return $selector.html(this.$el);
 		} else {
-			return out;
+			return this.$el;
 		}
 	};
 
@@ -61,17 +63,18 @@
 			tmpl = fieldTemplates[this.type];
 		}
 		if (tmpl) {
-			return $(tmplContainer($.extend({
+			this.$el = $(tmplContainer($.extend({
 				tmplAttributes : tmplAttributes,
 				tmplInput : tmplInput,
 				tmplField : tmpl
 			}, this)));
+			return this.$el;
 		}
 	};
 
 	var tmplContainer = $.template([
 		"<div class=\"field-wrap <%= type %>\">",
-			"<%= (label) ? '<label for=\"' + attributes.id + '\">' + label + '</label>' : '' %>",
+			"<%= (typeof label !=='undefined') ? '<label for=\"' + attributes.id + '\">' + label + '</label>' : '' %>",
 			"<%= obj.tmplField(obj) %>",
 		"</div>"
 	].join('\n'));

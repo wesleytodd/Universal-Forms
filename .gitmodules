@@ -1,3 +1,6 @@
 [submodule "javascript/drivers/jquery/lib/jquery-templates"]
 	path = javascript/drivers/jquery/lib/jquery-templates
 	url = https://github.com/wesleytodd/jQuery-Templates.git
+[submodule "javascript/drivers/jquery/lib/jquery-validation"]
+	path = javascript/drivers/jquery/lib/jquery-validation
+	url = https://github.com/jzaefferer/jquery-validation.git
