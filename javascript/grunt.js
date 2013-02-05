@@ -49,4 +49,32 @@ module.exports = function(grunt){
 	});
 
 	grunt.registerTask('examples', 'example-server watch');
+
+	grunt.registerTask('new-driver', 'Create a new driver', function() {
+		var done = this.async();
+		
+		var prompt = require('prompt');
+		prompt.message = '['.white + '?'.green + ']'.white + ' ';
+		prompt.delimiter = '';
+		prompt.start();
+		prompt.get({
+			properties : {
+				name : {
+					description : 'Driver name:'
+				}
+			}
+		}, function(err, input) {
+			var fs = require('fs'),
+				path = require('path');
+
+			fs.mkdir(path.join('drivers', input.name), function() {
+				fs.mkdirSync(path.join('drivers', input.name, 'examples'));
+				fs.mkdirSync(path.join('drivers', input.name, 'test'));
+				fs.writeFileSync(path.join('drivers', input.name, 'renderer.js'), '');
+				fs.writeFileSync(path.join('drivers', input.name, 'validator.js'), '');
+				done();
+			});
+		});
+
+	});
 };
