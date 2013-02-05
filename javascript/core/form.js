@@ -9,52 +9,62 @@
 	/**
 	 * Form Object Constructor
 	 *
-	 * @param options object A hash of form options, fields and validations rules
-	 *
 	 * This is the main interface for the library.  This object handles the state of the form
 	 * and maintains an array of all fields.
 	 */
-	var Form = function(options) {
+	var Form = function(form, opts) {
 		// force instantiation of new object
-		if (!(this instanceof Form)) return new Form(options);
+		if (!(this instanceof Form)) return new Form(form, opts);
 
-		// setup options
-		if (typeof options === 'undefined') options = {};
+		// setup form
+		if (typeof form === 'undefined') form = {};
 
 		// set common top level attributes
-		options.attributes        = options.attributes || {};
-		options.attributes.id     = options.id;
-		options.attributes.method = options.method || 'POST';
-		options.attributes.action = options.action;
+		form.attributes        = form.attributes || {};
+		form.attributes.id     = form.id;
+		form.attributes.method = form.method || 'POST';
+		form.attributes.action = form.action;
 
-		this.attributes = options.attributes;
+		this.attributes = form.attributes;
 		this.fields     = {};
-		this.options    = options;
+		this.formJSON   = form;
 
 		// setup and process fields
-		if (typeof options.fields === 'undefined') options.fields = [];
-		else if (!(options.fields instanceof Array)) throw new TypeError('Fields must be defined as an array');
+		if (typeof form.fields === 'undefined') form.fields = [];
+		else if (!(form.fields instanceof Array)) throw new TypeError('Fields must be defined as an array');
 
-		var len = options.fields.length;
+		var len = form.fields.length;
 		for (var i = 0; i < len; i++) {
-			this.addField(options.fields[i].name, options.fields[i].type, options.fields[i]);
+			this.addField(form.fields[i].name, form.fields[i].type, form.fields[i]);
 		};
 
-		Form.trigger(this. 'init');
+		this.opts = {};
+		if (typeof Form.defaultOpts !== 'undefined') {
+			for (var prop in Form.defaultOpts) {
+				this.opts[prop] = Form.defaultOpts[prop];
+			}
+		}
+		if (typeof opts !== 'undefined') {
+			for (var prop in opts) {
+				this.opts[prop] = opts[prop];
+			}
+		}
+
+		Form.trigger(this, 'init');
 
 	};
 
 	/**
 	 * Add a new field to the form
 	 */
-	Form.prototype.addField = function(name, type, options) {
+	Form.prototype.addField = function(name, type, field, opts) {
 		// If just a Field object was passed in, add it
 		if (name instanceof UniversalForms.Field) return this.fields[name.name] = name;
 
 		// Otherwise, create a new field object and add it
-		return this.fields[name] = new UniversalForms.Field(name, type, options);
+		return this.fields[name] = new UniversalForms.Field(name, type, field, opts);
 
-		Form.trigger(this. 'addField');
+		Form.trigger(this, 'addField');
 	};
 
 	/**
@@ -62,7 +72,7 @@
 	 */
 	Form.prototype.removeField = function(name) {
 		if (typeof this.fields[name] !== 'undefined') delete this.fields[name];
-		Form.trigger(this. 'removeField');
+		Form.trigger(this, 'removeField');
 	};
 
 	/**

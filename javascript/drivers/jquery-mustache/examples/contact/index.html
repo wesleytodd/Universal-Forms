@@ -13,42 +13,40 @@
 
 
 	<!-- Universal Forms Templates -->
-	<script type="text/template" id="container">
+	<script type="text/template" id="field-input">
 		<div class="field-wrap {{type}}">
-			{{label}}
-			{{field}}
+			{{>label}}
+			<input{{>attrs}}/>
 		</div>
 	</script>
-	<script type="text/template" id="field-input">
-		<input {{#attributes}}{{name}}="{{value}}" {{/attributes}}/>
-	</script>
 	<script type="text/template" id="field-textarea">
-		<textarea {{#attributes}}{{name}}="{{value}}" {{/attributes}}>
-			{{value}}
-		</textarea>
+		<div class="field-wrap {{type}}">
+			{{>label}}
+			<textarea {{>attrs}}>
+				{{value}}
+			</textarea>
+		</div>
 	</script>
 	<script type="text/template" id="field-select">
-		<select {{#attributes}}{{name}}="{{value}}" {{/attributes}}>
+		<div class="field-wrap {{type}}">
+			{{>label}}
+			<select {{>attrs}}>
+				{{#options}}
+					<option value="{{value}}" {{selected}}>{{label}}</option>
+				{{/options}}
+			</select>
+		</div>
+	</script>
+	<script type="text/template" id="field-multi-input">
+		<div class="field-wrap {{type}}">
+			{{>label}}
 			{{#options}}
-				<option value="{{value}}" {{selected}}>{{label}}</option>
+				<div class="field-inner-wrap {{type}}">
+					{{>label}}
+					<input{{>attrs}}/>
+				</div>
 			{{/options}}
-		</select>
-	</script>
-	<script type="text/template" id="field-checkbox">
-		{{#options}}
-			<div class="field-inner-wrap">
-				{{label}}
-				{{>input}}
-			</div>
-		{{/options}}
-	</script>
-	<script type="text/template" id="field-radio">
-		{{#options}}
-			<div class="field-inner-wrap">
-				{{label}}
-				{{>input}}
-			</div>
-		{{/options}}
+		</div>
 	</script>
 	<!-- End Universal Forms Templates -->
 
@@ -60,15 +58,75 @@
 	<script src="../renderer.js"></script>
 	<script src="../validator.js"></script>
 	<script>
+		var contactForm = {
+			"id" : "contactForm",
+			"action" : "/contact",
+			"fields" : [
+				{
+					"name" : "fname",
+					"type" : "text",
+					"label" : "First Name"
+				},
+				{
+					"name" : "lname",
+					"type" : "text",
+					"label" : "Last Name"
+				},
+				{
+					"name" : "email",
+					"type" : "email",
+					"label" : "Email",
+					"rules" : [
+						"required",
+						"email"
+					]
+				},
+				{
+					"name" : "regarding",
+					"type" : "select",
+					"label" : "Regarding",
+					"value" : "What Up?",
+					"options" : {
+						"General" : "General",
+						"What Up?" : "What Up?",
+						"Other" : "Other"
+					}
+				},
+				{
+					"name" : "subject",
+					"type" : "text",
+					"label" : "Subject",
+					"rules" : [
+						"required"
+					]
+				},
+				{
+					"name" : "message",
+					"type" : "textarea",
+					"label" : "Message",
+					"rules" : [
+						"required",
+						"length[25,]"
+					]
+				},
+				{
+					"name" : "send",
+					"type" : "submit",
+					"value" : "Send"
+				}
+			]
+		};
 		jQuery(document).ready(function($){
-			var res = $.ajax({
-				dataType : 'json',
-				url : 'contact/form.json'
-			}).success(function(data) {
-				var form = UniversalForms.Form(data);
-				form.render('#contact-form');
-				//form.validate();
+			var form = UniversalForms.Form(contactForm, {
+				fieldTemplates : {
+					default  : $('#field-input').html(),
+					textarea : $('#field-textarea').html(),
+					select   : $('#field-select').html(),
+					checkbox : $('#field-multi-input').html(),
+					radio    : $('#field-multi-input').html()
+				}
 			});
+			form.render('#contact-form');
 		});
 	</script>
 </body>

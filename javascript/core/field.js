@@ -11,38 +11,53 @@
 	 *
 	 * The field object maintains the state of each individual field.
 	 */
-	var Field = function(name, type, options) {
+	var Field = function(name, type, field, opts) {
 		// force instantiation of new object
-		if (!(this instanceof Field)) return new Field(name, type, options);
+		if (!(this instanceof Field)) return new Field(name, type, field, opts);
 
 		// require name & type
 		if (typeof name !== 'string') throw new TypeError('A name is required for all fields');
 		if (typeof type !== 'string') throw new TypeError('A type is required for all fields');
 
-		// Setup options
-		if (typeof options !== 'object') options = {};
+		// Setup field
+		if (typeof field !== 'object') field = {};
 
 		// set rules array
-		if (typeof options.rules === 'undefined') options.rules = [];
-		else if (!(options.rules instanceof Array)) throw new TypeError('the rules must be defined as an array');
+		if (typeof field.rules === 'undefined') field.rules = [];
+		else if (!(field.rules instanceof Array)) throw new TypeError('the rules must be defined as an array');
 
 		// set common top level attributes
-		options.attributes        = options.attributes || {};
-		options.attributes.name   = name;
+		field.attributes        = field.attributes || {};
+		field.attributes.name   = name;
 
-		if (['textarea', 'select'].indexOf(type) !== -1) {
-			options.attributes.type = type;
+		if (['textarea', 'select'].indexOf(type) === -1) {
+			field.attributes.type = type;
 		}
 
         this.name       = name;
         this.type       = type;
-		this.value      = options.value || '';
-        this.label      = options.label;
-        this.attributes = options.attributes;
-        this.rules      = options.rules;
-        this.options    = options;
+		this.value      = field.value || '';
+        this.label      = field.label;
+        this.attributes = field.attributes;
+        this.rules      = field.rules;
+        this.fieldJSON  = field;
         this.errors     = {};
 
+		if (['select', 'radio', 'checkbox'].indexOf(this.type) !== -1) {
+			this.options = field.options;
+		}
+
+		this.opts = {};
+		if (typeof Field.defaultOpts !== 'undefined') {
+			for (var prop in Field.defaultOpts) {
+				this.opts[prop] = Field.defaultOpts[prop];
+			}
+		}
+		if (typeof opts !== 'undefined') {
+			for (var prop in opts) {
+				this.opts[prop] = opts[prop];
+			}
+		}
 		Field.trigger(this, 'init');
 
 	};
@@ -62,6 +77,29 @@
 		if (typeof this.errors[type] !== 'undefined') return delete this.errors[type];
 		if (typeof type === 'undefined') this.errors = {};
 		Field.trigger(this, 'clearError');
+	};
+
+	/**
+	 * Serialize
+	 */
+	Field.prototype.serialize = function(toJSON) {
+		var obj = {
+			name       : this.name,
+			type       : this.type,
+			value      : this.value,
+			label      : this.label,
+			rules      : this.rules,
+			errors     : this.errors
+		};
+		if (['select', 'radio', 'checkbox'].indexOf(this.type) !== -1) {
+			obj.options = this.options;
+		}
+		toJSON = (typeof toJSON !== 'undefined') ? toJSON : false;
+		if (toJSON) {
+			return JSON.stringify(obj);
+		} else {
+			return obj;
+		}
 	};
 
 	/**
