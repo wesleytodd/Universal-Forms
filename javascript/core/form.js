@@ -6,7 +6,6 @@
  *
  */
 (function() {
-
 	/**
 	 * Form Object Constructor
 	 *
@@ -16,7 +15,6 @@
 	 * and maintains an array of all fields.
 	 */
 	var Form = function(options) {
-
 		// force instantiation of new object
 		if (!(this instanceof Form)) return new Form(options);
 
@@ -42,6 +40,8 @@
 			this.addField(options.fields[i].name, options.fields[i].type, options.fields[i]);
 		};
 
+		Form.trigger(this. 'init');
+
 	};
 
 	/**
@@ -53,6 +53,8 @@
 
 		// Otherwise, create a new field object and add it
 		return this.fields[name] = new UniversalForms.Field(name, type, options);
+
+		Form.trigger(this. 'addField');
 	};
 
 	/**
@@ -60,25 +62,33 @@
 	 */
 	Form.prototype.removeField = function(name) {
 		if (typeof this.fields[name] !== 'undefined') delete this.fields[name];
+		Form.trigger(this. 'removeField');
 	};
 
 	/**
 	 * Loop through fields
 	 */
 	Form.prototype.eachField = function(fnc, ctx) {
-		ctx = ctx || this;
 		for (var name in this.fields) {
-			if (fnc.call(ctx, this.fields[name], name, this.fields) === false) break;
+			if (fnc.call(ctx || this, this.fields[name], name, this.fields) === false) break;
 		};
 	};
 
 	/**
-	 * Render methods placeholders
+	 * Plugin/Driver Hooks
 	 */
-	Form.prototype.render = function() {};
-	Form.prototype.open   = function() {};
-	Form.prototype.field  = function() {};
-	Form.prototype.close  = function() {};
+	Form.on = function(evt, fnc) {
+		if (typeof Form._hooks === 'undefined') Form._hooks = {};
+		if (typeof Form._hooks[evt] === 'undefined') Form._hooks[evt] = [];
+		Form._hooks[evt].push(fnc);
+	};
+
+	Form.trigger = function(ctx, evt) {
+		if (typeof Form._hooks === 'undefined' || Form._hooks[evt] === 'undefined') return;
+		for (var i = 0, l = Form._hooks[evt].length; i < l; i++) {
+			Form._hooks[evt][i].apply(ctx, Array.prototype.slice.call(arguments, 2));
+		}
+	};
 
 	/**
 	 * Export

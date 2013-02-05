@@ -12,7 +12,7 @@
 	 * The field object maintains the state of each individual field.
 	 */
 	var Field = function(name, type, options) {
-		// setup a field here
+		// force instantiation of new object
 		if (!(this instanceof Field)) return new Field(name, type, options);
 
 		// require name & type
@@ -30,27 +30,9 @@
 		options.attributes        = options.attributes || {};
 		options.attributes.name   = name;
 
-		switch (type) {
-			case 'text' :
-			case 'password' :
-			case 'hidden' :
-			case 'email' :
-			case 'search' :
-			case 'date' :
-			case 'datetime' :
-			case 'file' :
-			case 'number' :
-			case 'range' :
-			case 'tel' :
-			case 'time' :
-			case 'url' :
-			case 'color' :
-			case 'month' :
-			case 'week' :
-			case 'submit' :
-				options.attributes.type = type;
-				break;
-		};
+		if (['textarea', 'select'].indexOf(type) !== -1) {
+			options.attributes.type = type;
+		}
 
         this.name       = name;
         this.type       = type;
@@ -61,6 +43,8 @@
         this.options    = options;
         this.errors     = {};
 
+		Field.trigger(this, 'init');
+
 	};
 
 	/**
@@ -68,6 +52,7 @@
 	 */
 	Field.prototype.setError = function(type, message) {
 		this.errors[type] = message;
+		Field.trigger(this, 'setError');
 	};
 
 	/**
@@ -76,12 +61,24 @@
 	Field.prototype.clearError = function(type) {
 		if (typeof this.errors[type] !== 'undefined') return delete this.errors[type];
 		if (typeof type === 'undefined') this.errors = {};
+		Field.trigger(this, 'clearError');
 	};
 
 	/**
-	 * Render field placeholder method
+	 * Plugin/Driver Hooks
 	 */
-	Field.prototype.render = function() {}
+	Field.on = function(evt, fnc) {
+		if (typeof Field._hooks === 'undefined') Field._hooks = {};
+		if (typeof Field._hooks[evt] === 'undefined') Field._hooks[evt] = [];
+		Field._hooks[evt].push(fnc);
+	};
+
+	Field.trigger = function(ctx, evt) {
+		if (typeof Field._hooks === 'undefined' || Field._hooks[evt] === 'undefined') return;
+		for (var i = 0, l = Field._hooks[evt].length; i < l; i++) {
+			Field._hooks[evt][i].apply(ctx, Array.prototype.slice.call(arguments, 2));
+		}
+	};
 
 	/**
 	 * Export

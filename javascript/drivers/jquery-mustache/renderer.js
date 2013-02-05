@@ -1,20 +1,31 @@
 (function($, Mustache, UniversalForms) {
-	
+
+	Mustache.compilePartial('attrs', '{{#attributes}} {{name}}="{{{value}}}"{{/attributes}}');
+
 	/**
 	 * Form render methods
 	 */
 	var formMethods = {};
 
 	formMethods.open = function() {
-		
+		var data = {
+			attributes : []
+		};
+		for (var name in this.attributes) {
+			data.attributes.push({
+				name : name,
+				value : this.attributes[name]
+			});
+		}
+		return Mustache.render(this.openTemplate || '<form{{>attrs}}>', data);
 	};
 
 	formMethods.field = function(name) {
-		
+		return this.fields[name].render();
 	};
 
 	formMethods.close = function() {
-		
+		return Mustache.render(this.closeTemplate || '</form>');
 	};
 
 	formMethods.render = function() {
