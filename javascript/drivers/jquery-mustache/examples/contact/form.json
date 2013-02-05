@@ -1,0 +1,58 @@
+{
+	"id" : "contactForm",
+	"action" : "/contact",
+	"fields" : [
+		{
+			"name" : "fname",
+			"type" : "text",
+			"label" : "First Name"
+		},
+		{
+			"name" : "lname",
+			"type" : "text",
+			"label" : "Last Name"
+		},
+		{
+			"name" : "email",
+			"type" : "email",
+			"label" : "Email",
+			"rules" : [
+				"required",
+				"email"
+			]
+		},
+		{
+			"name" : "regarding",
+			"type" : "select",
+			"label" : "Regarding",
+			"value" : "What Up?",
+			"options" : {
+				"General" : "General",
+				"What Up?" : "What Up?",
+				"Other" : "Other"
+			}
+		},
+		{
+			"name" : "subject",
+			"type" : "text",
+			"label" : "Subject",
+			"rules" : [
+				"required"
+			]
+		},
+		{
+			"name" : "message",
+			"type" : "textarea",
+			"label" : "Message",
+			"rules" : [
+				"required",
+				"length[25,]"
+			]
+		},
+		{
+			"name" : "send",
+			"type" : "submit",
+			"value" : "Send"
+		}
+	]
+}
