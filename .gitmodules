@@ -7,3 +7,6 @@
 [submodule "javascript/drivers/jquery-mustache/lib/mustache"]
 	path = javascript/drivers/jquery-mustache/lib/mustache
 	url = https://github.com/janl/mustache.js.git
+[submodule "javascript/drivers/jquery-mustache/lib/jquery-validation"]
+	path = javascript/drivers/jquery-mustache/lib/jquery-validation
+	url = https://github.com/jzaefferer/jquery-validation.git
