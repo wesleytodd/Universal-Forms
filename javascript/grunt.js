@@ -52,6 +52,58 @@ module.exports = function(grunt){
 
 	grunt.registerTask('new-driver', 'Create a new driver', function() {
 		var done = this.async();
+
+		var tmplRenderer = [
+			'(function(UniversalForms) {',
+			'',
+			'	/**',
+			'	 * Form render methods',
+			'	 */',
+			'	var formMethods = {};',
+			'',
+			'	formMethods.open = function() {',
+			'',
+			'	};',
+			'',
+			'	formMethods.field = function(name) {',
+			'',
+			'	};',
+			'',
+			'	formMethods.close = function() {',
+			'',
+			'	};',
+			'',
+			'	formMethods.render = function() {',
+			'		var out = \'\';',
+			'		out += this.open();',
+			'		this.eachField(function(field) {',
+			'			out += this.field(field.name);',
+			'		});',
+			'		out += this.close();',
+			'		return out;',
+			'	};',
+			'',
+			'	// Decorate Form prototype',
+			'	for (var method in formMethods) {',
+			'		UniversalForms.Form.prototype[method] = formMethods[method];',
+			'	};',
+			'',
+			'	/**',
+			'	 * Field render methods',
+			'	 */',
+			'	var fieldMethods = {};',
+			'',
+			'	fieldMethods.render = function() {',
+			'',
+			'	};',
+			'',
+			'	// Decorate Field prototype',
+			'	for (var method in fieldMethods) {',
+			'		UniversalForms.Field.prototype[method] = fieldMethods[method];',
+			'	};',
+			'',
+			'})(UniversalForms);'
+		].join('\n');
 		
 		var prompt = require('prompt');
 		prompt.message = '['.white + '?'.green + ']'.white + ' ';
@@ -67,13 +119,12 @@ module.exports = function(grunt){
 			var fs = require('fs'),
 				path = require('path');
 
-			fs.mkdir(path.join('drivers', input.name), function() {
-				fs.mkdirSync(path.join('drivers', input.name, 'examples'));
-				fs.mkdirSync(path.join('drivers', input.name, 'test'));
-				fs.writeFileSync(path.join('drivers', input.name, 'renderer.js'), '');
-				fs.writeFileSync(path.join('drivers', input.name, 'validator.js'), '');
-				done();
-			});
+			fs.mkdirSync(path.join('drivers', input.name));
+			fs.mkdirSync(path.join('drivers', input.name, 'examples'));
+			fs.mkdirSync(path.join('drivers', input.name, 'test'));
+			fs.writeFileSync(path.join('drivers', input.name, 'renderer.js'), tmplRenderer);
+			fs.writeFileSync(path.join('drivers', input.name, 'validator.js'), '');
+			done();
 		});
 
 	});
