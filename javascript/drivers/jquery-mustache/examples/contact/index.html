@@ -11,6 +11,47 @@
 
 	<div id="contact-form"></div>
 
+
+	<!-- Universal Forms Templates -->
+	<script type="text/template" id="container">
+		<div class="field-wrap {{type}}">
+			{{label}}
+			{{field}}
+		</div>
+	</script>
+	<script type="text/template" id="field-input">
+		<input {{#attributes}}{{name}}="{{value}}" {{/attributes}}/>
+	</script>
+	<script type="text/template" id="field-textarea">
+		<textarea {{#attributes}}{{name}}="{{value}}" {{/attributes}}>
+			{{value}}
+		</textarea>
+	</script>
+	<script type="text/template" id="field-select">
+		<select {{#attributes}}{{name}}="{{value}}" {{/attributes}}>
+			{{#options}}
+				<option value="{{value}}" {{selected}}>{{label}}</option>
+			{{/options}}
+		</select>
+	</script>
+	<script type="text/template" id="field-checkbox">
+		{{#options}}
+			<div class="field-inner-wrap">
+				{{label}}
+				{{>input}}
+			</div>
+		{{/options}}
+	</script>
+	<script type="text/template" id="field-radio">
+		{{#options}}
+			<div class="field-inner-wrap">
+				{{label}}
+				{{>input}}
+			</div>
+		{{/options}}
+	</script>
+	<!-- End Universal Forms Templates -->
+
 	<script src="../lib/jquery-1.9.0.min.js"></script>
 	<script src="../lib/mustache/mustache.js"></script>
 	<script src="../lib/jquery-validation/jquery.validate.js"></script>
