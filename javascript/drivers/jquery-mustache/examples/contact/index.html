@@ -59,7 +59,7 @@
 	<script src="../validator.js"></script>
 	<script>
 		var contactForm = {
-			"id" : "contactForm",
+			"id" : "contact-form",
 			"action" : "/contact",
 			"fields" : [
 				{
@@ -126,7 +126,7 @@
 					radio    : $('#field-multi-input').html()
 				}
 			});
-			form.render('#contact-form');
+			form.render().validate();
 		});
 	</script>
 </body>
