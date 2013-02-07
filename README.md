@@ -50,7 +50,7 @@ I am going to start with JavaScript, PHP and Go.  But hopefully in the future I 
 				"name"       : "field3",
 				"id"         : "field3",
 				"type"       : "select",
-				"label"      : "Field 3"
+				"label"      : "Field 3",
 				"options"    : {
 					""  : "Select One",
 					"1" : "One",
@@ -65,7 +65,7 @@ I am going to start with JavaScript, PHP and Go.  But hopefully in the future I 
 				"name"       : "field4",
 				"id"         : "field4",
 				"type"       : "password",
-				"label"     : "Field 4"
+				"label"     : "Field 4",
 				"rules"      : [
 					"required"
 				]
