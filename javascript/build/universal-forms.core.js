@@ -36,14 +36,14 @@
 			field.attributes.value  = field.value || '';
 		}
 
-        this.name       = name;
-        this.type       = type;
+		this.name       = name;
+		this.type       = type;
 		this.value      = field.value || '';
-        this.label      = field.label;
-        this.attributes = field.attributes;
-        this.rules      = field.rules;
-        this.fieldJSON  = field;
-        this.errors     = {};
+		this.label      = field.label;
+		this.attributes = field.attributes;
+		this.rules      = field.rules;
+		this.fieldJSON  = field;
+		this.errors     = {};
 
 		if (['select', 'radio', 'checkbox'].indexOf(this.type) !== -1) {
 			this.options = field.options;
