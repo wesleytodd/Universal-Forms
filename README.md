@@ -81,21 +81,53 @@ I am going to start with JavaScript, PHP and Go.  But hopefully in the future I 
 		]
 	}
 
-## Templates
+## Core Libraries
 
-Each implementation will be accompanied by a set of templates following this structure:
+The goal is to have both a `Form` and a `Field` class/object definition in each language supported.  These core libraries are intended to simply handle the instantiation and input/output of form elements.  For now I am thinking that the interfaces for these core libraries will look like:
 
-- wrap
-- input
-- radio
-- checkbox
-- select
-- textarea
-- button
+	Form([form, [opts]])
+	|- addField()
+	|- removeField()
+	|- serialize()
+	|- unserialize(json)
+	|- eachField(fnc[, context])
+	|- attributes
+	|- fields
+	|- formJson
+	|- opts
+
+	Field(name, type, field[, opts])
+	|- serialize()
+	|- unserialize(json)
+	|- name
+	|- type
+	|- value
+	|- label
+	|- attributes
+	|- rules
+	|- fieldJSON
+	|- opts
 
 
 
+## Drivers
 
+Integration code for the Universal Forms standard can be packaged in the form of a driver.  Drivers are intended to be specific to a particular stack, and are the way to extend the core libraries with custom functionality.  A typical driver will implement a renderer and a validator which can integrate with the core libraries through either adding methods or inheritance depending on the language and needs.  For example, a javascript driver might be written as such:
 
+```javascript
+(function(UniversalForms) {
 
+	UniversalForms.Form.render = function() {
+		// Render the form
+	};
 
+	UniversalForms.Form.ajaxSubmit = function() {
+		// Submit via ajax
+	}
+
+	UniversalForms.Field.validate = function() {
+		// Validate the field
+	}
+
+})(UniversalForms);
+```
