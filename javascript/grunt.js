@@ -9,7 +9,7 @@ module.exports = function(grunt){
 		},
 		mocha : {
 			all : {
-				src : ['test/browser/index.html'],
+				src : ['core/test/index.html'],
 				options : {
 					run : true
 				}

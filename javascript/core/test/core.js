@@ -25,7 +25,7 @@ describe('Universal Forms', function() {
 			expect(form.attributes.method).to.be('POST');
 			expect(form.attributes.action).to.be('/');
 			expect(form.attributes.class).to.be('class');
-			expect(form.options).to.be(options);
+			expect(form.formJSON).to.be(options);
 		});
 
 		it('Should add fields to a Form', function() {
@@ -107,7 +107,7 @@ describe('Universal Forms', function() {
 			expect(field.attributes.type).to.be('type');
 			expect(field.attributes.id).to.be('id');
 			expect(field.attributes.value).to.be('value');
-			expect(field.options).to.be(options);
+			expect(field.fieldJSON).to.be(options);
 		});
 
 		it('Should set an error of a field', function() {

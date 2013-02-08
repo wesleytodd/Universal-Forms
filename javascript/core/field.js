@@ -29,9 +29,11 @@
 		// set common top level attributes
 		field.attributes        = field.attributes || {};
 		field.attributes.name   = name;
+		field.attributes.id     = field.id || '';
 
 		if (['textarea', 'select'].indexOf(type) === -1) {
 			field.attributes.type = type;
+			field.attributes.value  = field.value || '';
 		}
 
         this.name       = name;
