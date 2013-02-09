@@ -83,57 +83,11 @@ module.exports = function(grunt){
 
 	grunt.registerTask('examples', 'example-server watch');
 
-	grunt.registerTask('new-driver', 'Create a new driver', function() {
+	grunt.registerTask('new-plugin', 'Create a new plugin', function() {
 		var done = this.async();
 
-		var tmplRenderer = [
+		var tmpl = [
 			'(function(UniversalForms) {',
-			'',
-			'	/**',
-			'	 * Form render methods',
-			'	 */',
-			'	var formMethods = {};',
-			'',
-			'	formMethods.open = function() {',
-			'',
-			'	};',
-			'',
-			'	formMethods.field = function(name) {',
-			'',
-			'	};',
-			'',
-			'	formMethods.close = function() {',
-			'',
-			'	};',
-			'',
-			'	formMethods.render = function() {',
-			'		var out = \'\';',
-			'		out += this.open();',
-			'		this.eachField(function(field) {',
-			'			out += this.field(field.name);',
-			'		});',
-			'		out += this.close();',
-			'		return out;',
-			'	};',
-			'',
-			'	// Decorate Form prototype',
-			'	for (var method in formMethods) {',
-			'		UniversalForms.Form.prototype[method] = formMethods[method];',
-			'	};',
-			'',
-			'	/**',
-			'	 * Field render methods',
-			'	 */',
-			'	var fieldMethods = {};',
-			'',
-			'	fieldMethods.render = function() {',
-			'',
-			'	};',
-			'',
-			'	// Decorate Field prototype',
-			'	for (var method in fieldMethods) {',
-			'		UniversalForms.Field.prototype[method] = fieldMethods[method];',
-			'	};',
 			'',
 			'})(UniversalForms);'
 		].join('\n');
@@ -145,18 +99,17 @@ module.exports = function(grunt){
 		prompt.get({
 			properties : {
 				name : {
-					description : 'Driver name:'
+					description : 'Plugin name:'
 				}
 			}
 		}, function(err, input) {
 			var fs = require('fs'),
 				path = require('path');
 
-			fs.mkdirSync(path.join('drivers', input.name));
-			fs.mkdirSync(path.join('drivers', input.name, 'examples'));
-			fs.mkdirSync(path.join('drivers', input.name, 'test'));
-			fs.writeFileSync(path.join('drivers', input.name, 'renderer.js'), tmplRenderer);
-			fs.writeFileSync(path.join('drivers', input.name, 'validator.js'), '');
+			fs.mkdirSync(path.join('plugins', input.name));
+			fs.mkdirSync(path.join('plugins', input.name, 'examples'));
+			fs.mkdirSync(path.join('plugins', input.name, 'test'));
+			fs.writeFileSync(path.join('plugins', input.name, 'universal-forms-' + input.name + '.js'), tmpl);
 			done();
 		});
 
