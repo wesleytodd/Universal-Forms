@@ -13,22 +13,32 @@ $json = '{
 		{
 			"name" : "name",
 			"type" : "text",
+			"label" : "Name",
 			"rules" : ["required"]
 		},
 		{
 			"name" : "email",
 			"type" : "email",
+			"label" : "Email",
+			"value" : "wes@wesleytodd.com",
 			"rules" : ["required", "email"]
 		},
 		{
 			"name" : "message",
 			"type" : "textarea",
+			"label" : "Message",
 			"rules" : ["required", "length[30,]"]
 		}
 	]
 }';
 
-echo "<pre>";
-$form = new Form($json);
+try {
+	$form = new Form($json);
+	$form->addField('subject', 'text');
 
-var_dump($form);
+	//header('Content-type: text/json');
+	var_dump($form->serialize(false));
+
+} catch (Exception $e) {
+	var_dump($e);
+}

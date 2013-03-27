@@ -3,6 +3,7 @@
 namespace wesleytodd\UniversalForms\Core;
 
 use IteratorAggregate;
+use ArrayIterator;
 use Serializable;
 use JsonSerializable;
 
@@ -31,7 +32,6 @@ class Form implements IteratorAggregate, JsonSerializable, Serializable {
 	 * @param array $opts an array of other options
 	 */
 	public function __construct($form) {
-		var_dump($form);
 		if (!is_string($form)) {
 			$form = json_encode($form);
 		}
@@ -52,7 +52,7 @@ class Form implements IteratorAggregate, JsonSerializable, Serializable {
 			return $this;
 		}
 
-		$this->fields[$name] = new Field($name, $type, $field, $opts);
+		$this->fields[$name] = new Field($name, $type, $field);
 		return $this;
 	}
 
@@ -70,41 +70,57 @@ class Form implements IteratorAggregate, JsonSerializable, Serializable {
 	 * Implementing iterator interface
 	 */
 	public function getIterator() {
-        return new ArrayIterator($this->fields);
-    }
-
-    /**
-     * Implementing serializeable serialize
-     */
-    public function serialize() {
-    	return json_encode($this);
-    }
-
-    /**
-     * Implementing serializeable unserialize
-     */
-    public function unserialize($data) {
-    	$form = json_decode($data);
-    	if (!isset($form['attributes'])) {
-			$form['attributes'] = array();
-		}
-		$form['attributes']['id']     = $form['id'];
-		$form['attributes']['method'] = $form['method'];
-		$form['attributes']['action'] = $form['action'];
-
-		$this->attributes = $form['attributes'];
-
-		foreach ($form['fields'] as $field) {
-			$this->addField($field['name'], $field['type'], $field);
-		}
-    }
+		return new ArrayIterator($this->fields);
+	}
 
 	/**
-     * Implementing jsonSerialize
-     */
-    public function jsonSerialize() {
-    	var_dump($this);
-    	return array();
-    }
+	 * Implementing serializeable serialize
+	 */
+	public function serialize($asJSON = true) {
+		if ($asJSON) {
+			return json_encode($this);
+		} else {
+			return $this->jsonSerialize();
+		}
+	}
+
+	/**
+	 * Implementing serializeable unserialize
+	 */
+	public function unserialize($data) {
+		$form = json_decode($data);
+		if (!isset($form->attributes)) {
+			$form->attributes = array();
+		}
+		$form->attributes['id']     = $form->id;
+		$form->attributes['method'] = $form->method;
+		$form->attributes['action'] = $form->action;
+
+		$this->attributes = $form->attributes;
+
+		foreach ($form->fields as $field) {
+			$this->addField($field->name, $field->type, $field);
+		}
+	}
+
+	/**
+	 * Implementing jsonSerialize
+	 */
+	public function jsonSerialize() {
+		$fields = array();
+		foreach ($this as $field) {
+			$fields[] = $field->serialize(false);
+		}
+		return array(
+			'id' => $this->attributes['id'],
+			'method' => $this->attributes['method'],
+			'action' => $this->attributes['action'],
+			'fields' => $fields
+		);
+	}
+
+	public function __toString(){
+		return $this->serialize();
+	}
 
 }

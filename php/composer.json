@@ -1,0 +1,19 @@
+{
+    "name": "wesleytodd/universal-forms",
+    "description": "A Universal Form Implementation in PHP",
+    "authors": [
+        {
+            "name": "Wes Todd",
+            "email": "wes@wesleytodd.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "Wesleytodd\\UniversalForms": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
