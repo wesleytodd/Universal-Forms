@@ -2,9 +2,9 @@
 
 namespace wesleytodd\UniversalForms\Laravel;
 
-use wesleytodd\UniversalForms\Core\Form;
+use wesleytodd\UniversalForms\Core\Form as CoreForm;
 
-class Form extends wesleytodd\UniversalForms\Core\Form {
+class Form extends CoreForm {
 
 
 }

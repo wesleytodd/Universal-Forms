@@ -2,7 +2,10 @@
 
 namespace wesleytodd\UniversalForms\Core;
 
-class Field {
+use Serializable;
+use JsonSerializable;
+
+class Field implements JsonSerializable, Serializable {
 	
 	/**
 	 * Field attributes
@@ -28,7 +31,7 @@ class Field {
 	 * @param string|array $field the field declaration
 	 * @param arrat $opts an array of options
 	 */
-	public function __constructor($name, $type, $field = array(), $opts) {
+	public function __constructor($name, $type, $field = array()) {
 
 		if (isset($field['rules'])) {
 			$this->rules = $field['rules'];
@@ -55,5 +58,27 @@ class Field {
 		}
 
 	}
+
+	/**
+     * Implementing serializeable serialize
+     */
+    public function serialize() {
+
+    }
+
+    /**
+     * Implementing serializeable unserialize
+     */
+    public function unserialize($data) {
+    	
+    }
+
+    /**
+     * Implementing jsonSerialize
+     */
+    public function jsonSerialize() {
+    	var_dump($this);
+    	return array();
+    }
 	
 }

@@ -3,8 +3,8 @@
 require('../src/wesleytodd/UniversalForms/Core/Form.php');
 require('../src/wesleytodd/UniversalForms/Core/Field.php');
 
-use \wesleytodd\UniversalForms\Core\Form as Form;
-use \wesleytodd\UniversalForms\Core\Field as Field;
+use \wesleytodd\UniversalForms\Core\Form;
+use \wesleytodd\UniversalForms\Core\Field;
 
 $json = '{
 	"action" : "/examples/contact.php",

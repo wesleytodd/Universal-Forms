@@ -3,24 +3,26 @@
 namespace wesleytodd\UniversalForms\Core;
 
 use IteratorAggregate;
+use Serializable;
+use JsonSerializable;
 
-class Form implements IteratorAggregate {
+class Form implements IteratorAggregate, JsonSerializable, Serializable {
 
 	/**
 	 * Form attributes
 	 *
 	 * @var array
-	 * @access protected
+	 * @access public
 	 */
-	protected $_attributes = array();
+	public $attributes = array();
 
 	/**
 	 * Form fields
 	 *
 	 * @var array
-	 * @access protected
+	 * @access public
 	 */
-	protected $_fields = array();
+	public $fields = array();
 
 	/**
 	 * Constructor
@@ -28,23 +30,11 @@ class Form implements IteratorAggregate {
 	 * @param string|array $form an array or json string UniversalForm declaration
 	 * @param array $opts an array of other options
 	 */
-	public function __constructor($form, $opts) {
-		if (is_string($form)) {
-			$form = json_decode($form);
+	public function __constructor($form) {
+		if (!is_string($form)) {
+			$form = json_encode($form);
 		}
-
-		if (!isset($form['attributes'])) {
-			$form['attributes'] = array();
-		}
-		$form['attributes']['id']     = $form['id'];
-		$form['attributes']['method'] = $form['method'];
-		$form['attributes']['action'] = $form['action'];
-
-		$this->_attributes = $form['attributes'];
-
-		foreach ($form['fields'] as $field) {
-			$this->addField($field['name'], $field['type'], $field);
-		}
+		$this->unserialize($form);
 	}
 
 	/**
@@ -55,13 +45,13 @@ class Form implements IteratorAggregate {
 	 * @param string|array $field the field declaration
 	 * @param arrat $opts an array of options
 	 */
-	public function addField($name, $type = '', $field = array(), $opts = array()) {
+	public function addField($name, $type = '', $field = array()) {
 		if ($name instanceof Field) {
-			$this->_fields[$name->name] = $name;
+			$this->fields[$name->name] = $name;
 			return $this;
 		}
 
-		$this->_fields[$name] = new Field($name, $type, $field, $opts);
+		$this->fields[$name] = new Field($name, $type, $field, $opts);
 		return $this;
 	}
 
@@ -71,7 +61,7 @@ class Form implements IteratorAggregate {
 	 * @param string $name the field name
 	 */
 	public function removeField($name) {
-		unset($this->_fields[$name]);
+		unset($this->fields[$name]);
 		return $this;
 	}
 
@@ -79,7 +69,41 @@ class Form implements IteratorAggregate {
 	 * Implementing iterator interface
 	 */
 	public function getIterator() {
-        return new ArrayIterator($this->_fields);
+        return new ArrayIterator($this->fields);
+    }
+
+    /**
+     * Implementing serializeable serialize
+     */
+    public function serialize() {
+    	return json_encode($this);
+    }
+
+    /**
+     * Implementing serializeable unserialize
+     */
+    public function unserialize($data) {
+    	$form = json_decode($data);
+    	if (!isset($form['attributes'])) {
+			$form['attributes'] = array();
+		}
+		$form['attributes']['id']     = $form['id'];
+		$form['attributes']['method'] = $form['method'];
+		$form['attributes']['action'] = $form['action'];
+
+		$this->attributes = $form['attributes'];
+
+		foreach ($form['fields'] as $field) {
+			$this->addField($field['name'], $field['type'], $field);
+		}
+    }
+
+	/**
+     * Implementing jsonSerialize
+     */
+    public function jsonSerialize() {
+    	var_dump($this);
+    	return array();
     }
 
 }
