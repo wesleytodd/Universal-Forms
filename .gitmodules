@@ -10,3 +10,6 @@
 [submodule "javascript/drivers/jquery-mustache/lib/jquery-validation"]
 	path = javascript/drivers/jquery-mustache/lib/jquery-validation
 	url = https://github.com/jzaefferer/jquery-validation.git
+[submodule "php"]
+	path = php
+	url = git@github.com:wesleytodd/Universal-Forms-PHP.git
