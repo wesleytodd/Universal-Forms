@@ -31,7 +31,7 @@ class Field implements JsonSerializable, Serializable {
 	 * @param string|array $field the field declaration
 	 * @param arrat $opts an array of options
 	 */
-	public function __constructor($name, $type, $field = array()) {
+	public function __construct($name, $type, $field = array()) {
 
 		if (isset($field['rules'])) {
 			$this->rules = $field['rules'];

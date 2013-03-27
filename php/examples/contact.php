@@ -28,7 +28,7 @@ $json = '{
 	]
 }';
 
+echo "<pre>";
 $form = new Form($json);
 
-echo "<pre>";
 var_dump($form);

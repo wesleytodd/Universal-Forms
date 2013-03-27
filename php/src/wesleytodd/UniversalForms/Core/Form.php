@@ -30,7 +30,8 @@ class Form implements IteratorAggregate, JsonSerializable, Serializable {
 	 * @param string|array $form an array or json string UniversalForm declaration
 	 * @param array $opts an array of other options
 	 */
-	public function __constructor($form) {
+	public function __construct($form) {
+		var_dump($form);
 		if (!is_string($form)) {
 			$form = json_encode($form);
 		}
