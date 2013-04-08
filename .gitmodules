@@ -13,3 +13,6 @@
 [submodule "php"]
 	path = php
 	url = git@github.com:wesleytodd/Universal-Forms-PHP.git
+[submodule "javascript"]
+	path = javascript
+	url = git@github.com:wesleytodd/Universal-Forms-Javascript.git
